@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+import java.io.File;
 /**
  *
  * @author Pascal
@@ -13,12 +8,20 @@ public class MiniExplorerGUI extends javax.swing.JFrame {
     /**
      * Creates new form MiniExplorerGUI
      */
-    
-    private DateiModell model = new DateiModell();
-    public MiniExplorerGUI() {
-        initComponents();
-        liDatei.setModel(model);
-    }
+  private String pathname = System.getProperty("user.dir");
+  private DateiModell dm;
+  
+  public MiniExplorerGUI()
+  {
+    initComponents();
+    this.setTitle(pathname);
+    this.setSize(600, 300);
+    this.setLocationRelativeTo(null);
+    liDatei.setCellRenderer(new FileListRenderer());
+    dm = new DateiModell();
+    liDatei.setModel(dm);
+    dm.changeDir(new File(System.getProperty("user.dir")));
+  }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -34,6 +37,11 @@ public class MiniExplorerGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        liDatei.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                onChangeDir(evt);
+            }
+        });
         jScrollPane1.setViewportView(liDatei);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -55,6 +63,12 @@ public class MiniExplorerGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void onChangeDir(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_onChangeDir
+        if (evt.getClickCount() == 2) {
+            dm.changeDir(liDatei.getSelectedValue());
+        }
+    }//GEN-LAST:event_onChangeDir
 
     /**
      * @param args the command line arguments
